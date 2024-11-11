@@ -6,6 +6,15 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Set for self-contained deployment (bundles the runtime with the app) -->
+    <SelfContained>true</SelfContained>
+
+    <!-- Specify target runtime -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+
+    <!-- Publish as a single file -->
+    <PublishSingleFile>true</PublishSingleFile>
   </PropertyGroup>
 
 </Project>
