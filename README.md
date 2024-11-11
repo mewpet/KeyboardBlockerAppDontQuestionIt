@@ -18,4 +18,4 @@ dotnet build -c Release
 dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
 ```
 
-### In both cases the resulting executable will be saved to `<ProjectRoot>/bin/Release/netWhatever`
+In both cases the resulting executable will be saved to `<ProjectRoot>/bin/Release/netWhatever`
