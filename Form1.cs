@@ -3,10 +3,17 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using System.Linq;
+using System.Text.Json;
+using System.IO;
 
 
 namespace ActiveWindowTitleApp
 {
+    public class Config
+    {
+        public string[] targetWindows { get; set; }
+    }
+
     public partial class Form1 : Form
     {
         private Config config;
@@ -38,19 +45,23 @@ namespace ActiveWindowTitleApp
         private HookProc _hookProc;
         private IntPtr _hookID = IntPtr.Zero;
 
-        private readonly string[] targetWindows = { "Discord", "Firefox", "Zoom" };
-
         public Form1()
         {
-            InitializeComponent();
-            InitializeTimer();
-
-            LoadConfig();
+            try
+            {
+                InitializeComponent();
+                InitializeTimer();
+                LoadConfig();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error during initialization: {ex.Message}");
+            }
         }
 
         private void LoadConfig()
         {
-            string jsonString = File.ReadAllText(./config.json);
+            string jsonString = File.ReadAllText("./config.json");
             config = JsonSerializer.Deserialize<Config>(jsonString);
         }
 
@@ -95,7 +106,8 @@ namespace ActiveWindowTitleApp
             StringBuilder windowTitle = new StringBuilder(256);
             GetWindowText(hwnd, windowTitle, 256);
 
-            if (targetWindows.Any(window => windowTitle.ToString().Contains(window)))
+            // Check if the active window title matches any of the target windows from the config
+            if (config.targetWindows.Any(window => windowTitle.ToString().Contains(window)))
             {
                 // Block the key press by returning 1 (this prevents the key from being passed to the application)
                 return 1;
