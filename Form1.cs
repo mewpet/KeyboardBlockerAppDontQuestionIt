@@ -2,11 +2,15 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Linq;
+
 
 namespace ActiveWindowTitleApp
 {
     public partial class Form1 : Form
     {
+        private Config config;
+
         // Windows API to get the handle of the active window
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
@@ -34,12 +38,20 @@ namespace ActiveWindowTitleApp
         private HookProc _hookProc;
         private IntPtr _hookID = IntPtr.Zero;
 
-        private const string targetWindow = "Discord"; // The name of the window you want to block keyboard input for
+        private readonly string[] targetWindows = { "Discord", "Firefox", "Zoom" };
 
         public Form1()
         {
             InitializeComponent();
             InitializeTimer();
+
+            LoadConfig();
+        }
+
+        private void LoadConfig()
+        {
+            string jsonString = File.ReadAllText(./config.json);
+            config = JsonSerializer.Deserialize<Config>(jsonString);
         }
 
         // Delegate to handle the hook procedure
@@ -83,8 +95,7 @@ namespace ActiveWindowTitleApp
             StringBuilder windowTitle = new StringBuilder(256);
             GetWindowText(hwnd, windowTitle, 256);
 
-            // If the active window title contains the target window name (e.g., Firefox), block the key press
-            if (windowTitle.ToString().Contains(targetWindow))
+            if (targetWindows.Any(window => windowTitle.ToString().Contains(window)))
             {
                 // Block the key press by returning 1 (this prevents the key from being passed to the application)
                 return 1;
