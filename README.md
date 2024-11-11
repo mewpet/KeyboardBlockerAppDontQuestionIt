@@ -2,9 +2,12 @@
 
 # Setup
 
-If cou actually wanna use this update the window title in `Form1.cs` in line 37.
+The project contains a config file at `<ProjectRoot>/config.json`.
+This file contains an array of window titles the project will check against, in which all keyboard input is blocked.
 
-The program will block any keyboard input as long as the current active window title contains whatever value you declare the check for.
+Since the program checks if the title contains a string, include a value in the config file that is present at all times in whatever application you want the block to be enabled. 
+
+**After compiling the program, copy this config file next to the executable.**
 
 To get the active window title of any application, you may compile the application and start it. The GUI will dynamically render the title of whatever window is in focus.
 
@@ -14,10 +17,12 @@ To get the active window title of any application, you may compile the applicati
 dotnet build -c Release
 ```
 
+Find the resulting executable with dependencies in `<ProjectRoot>/bin/Release/netWhatever`
+
 ## Build for production (standalone executable)
 
 ```shell
 dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
 ```
 
-In both cases the resulting executable will be saved to `<ProjectRoot>/bin/Release/netWhatever`
+Find the resulting standalone executable in `<ProjectRoot>/bin/Release/netWhatever/win/publish`
